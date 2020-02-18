@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="Model2.css">
+        
+        <style type="text/css">
+            /* Set a size for our map container, the Google Map will take up 100% of this container */
+            #map {
+                width: 1262px;
+                height: 900px;
+                top:0px;
+                left:0px;
+            }
+        </style>
+        
+        
+         <!-- // <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script> -->
+         <script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=places&sensor=false"></script>
+
+<!-- Initializing Checkboxes for event details and layers -->
+        <label class="Checkbox_Entertainment">
+            <input type="checkbox" id="entertainment" checked=true > Entertainment<br>
+        </label>
+        <label class="Checkbox_cultural">
+            <input type="checkbox" id="cultural" checked=true> Cultural<br>
+        </label>
+        <label class="Checkbox_Education">
+            <input type="checkbox" id="educative" checked=true> Educative<br>
+        </label>
+        <label class="Checkbox_Other">
+            <input type="checkbox" id="other" checked=true> Other<br>
+        </label>
+        <label class="Checkbox_HumanDensity">
+            <input type="checkbox" id="HumanDensity"> Human Density<br>
+        </label>
+        <label class="Checkbox_Traffic">
+            <input type="checkbox" id="Traffic"> Traffic<br>
+        </label>
+        <label class="Checkbox_Weather">
+            <input type="checkbox" id="Weather" > Weather<br>
+        </label>
+        <label class="Checkbox_PublicTransportation">
+            <input type="checkbox" id="PublicTransport"> Public Transport<br>
+        </label>
+        <label class="Checkbox_AirPollution">
+            <input type="checkbox" id="AirPollution" > Air Pollution<br>
+        </label>
+        <label class="Checkbox_Noise">
+            <input type="checkbox" id="noise"> Noise<br>
+        </label>
+        
+        <!-- Background box for event details -->
+        <div class="box"></div>  
+        <!-- Background box for layers -->
+        <div class="box2"></div>
+
+
+<!--Initializing and naming ranges for event details filters  -->
+        <div id='EventAttenders'>
+            <p>Number of Event Attenders</p>
+        </div>
+
+        <div id='PeopleDensity'>
+            <p>People Density</p>
+        </div>
+
+        <div id='Noise'>
+            <p>Noise</p>
+        </div>
+
+        <div id='Physicalchaos'>
+            <p>Physical Chaos</p>
+        </div>
+
+        <div id='Price'>
+            <p>Price</p>
+        </div>
+ 
+        <label class="range1">
+        <input id="range1" type="range" min="0" max="100" value="100" step="10" onchange="filterAttenders(this.value)" />
+        </label>
+
+        <label class="range2">
+        <input id="range2" type="range" min="0" max="3" value="3" step="1" onchange="filterDensity(this.value)"/>
+        </label>
+
+        <label class="range3">
+        <input type="range" min="0" max="100" value="70" step="5"/>
+        </label>
+
+        <label class="range4">
+        <input type="range" min="0" max="50" value="20" step="5"  />
+        </label>
+
+        <label class="range5">
+        <input type="range" min="0" max="100" value="80" step="5" />
+        </label>
+
+        <!-- Header for Event Details -->
+        <img id="event_details" src="UI_viz1-06.png" style="width:200px;height:45px;position:absolute;top:12%;left:82%;z-index:1;">
+
+        <!-- Header for Layers -->
+        <img id="layers" src="UI_viz1-05.png" style="width:200px;height:45px;position:absolute;top:12%;left:2%;z-index:1;">
+        
+        <script type="text/javascript">
+
+            // When the window has finished loading create our google map below
+            google.maps.event.addDomListener(window, 'load', init);
+
+
+
+// Initializing data to be displayed
+            // data for zoom level 1 i.e. zoom level=12
+            var locations=[{"Event":"Goztepe","latitude":40.98748,"longitude":29.05904,"Width":30,"Height":30,"Icon":"viz_all_layers_3_png-24.png"},
+                {"Event":"kadikoy Anadolu lisesi","latitude":40.98541,"longitude":29.03226,"Width":36.5,"Height":23,"Icon":"viz_all_layers_3_png-23.png"},
+                {"Event":"karakoy","latitude":41.02567,"longitude":28.97604,"Width":20,"Height":9,"Icon":"viz_all_layers_3_png-22.png"},
+                {"Event":"sirler parki","latitude":41.04203,"longitude":29.00033,"Width":23,"Height":26,"Icon":"viz_all_layers_3_png-21.png"},
+                {"Event":"ortakoy Musevi","latitude":41.05275,"longitude":29.01956,"Width":20,"Height":9,"Icon":"viz_all_layers_3_png-22.png"},
+                {"Event":"Ataturk Olimpiyat stadyumu","latitude":41.0456,"longitude":28.98439,"Width":37.4,"Height":35,"Icon":"viz_all_layers_3_png-19.png"},
+                {"Event":"sultangazi belediyesi","latitude":41.05666,"longitude":29.00617,"Width":36.5,"Height":23,"Icon":"viz_all_layers_3_png-23.png"},
+                {"Event":"Sisli","latitude":41.0599,"longitude":28.98832,"Width":15,"Height":15,"Icon":"viz_all_layers_3_png-18.png"}]
+
+            // data for zoom level 2 i.e. zoom level=15
+            var zoomLevel2=[{"Event":"a","latitude":41.02449,"longitude":28.97587,"Width":11,"Height":11,"Icon":"viz_all_layers_3_png-28.png"},
+                {"Event":"b","latitude":41.02741,"longitude":28.98205,"Width":11,"Height":11,"Icon":"viz_all_layers_3_png-28.png"},
+                {"Event":"c","latitude":41.03692,"longitude":28.99458,"Width":11,"Height":11,"Icon":"viz_all_layers_3_png-28.png"},
+                {"Event":"d","latitude":41.04159,"longitude":28.99664,"Width":11,"Height":11,"Icon":"viz_all_layers_3_png-28.png"},
+                {"Event":"e","latitude":41.04197,"longitude":28.98651,"Width":54,"Height":36.25,"Icon":"viz_all_layers_3_png-26.png"},
+                {"Event":"f","latitude":41.04456,"longitude":28.97887,"Width":69.3,"Height":80,"Icon":"viz_all_layers_3_png-25.png"},
+                {"Event":"g","latitude":41.03576,"longitude":28.97724,"Width":53,"Height":50,"Icon":"viz_all_layers_3_png-27.png"}]
+
+            // data for zoom level 3 i.e. zoom level=17
+            var zoomLevel3=[{"Event":"a","latitude":41.033485,"longitude":28.975909,"Size":42,"Icon":"viz_all_layers_3_png-29.png","Density":2,"Category":"other"},
+            {"Event":"b","latitude":41.034691,"longitude":28.977175,"Size":100,"Icon":"viz_all_layers_3_png-30.png","Density":3,"Category":"entertainment"},
+            {"Event":"c","latitude":41.034829,"longitude":28.978291,"Size":42,"Icon":"viz_all_layers_3_png-31.png","Density":1,"Category":"entertainment"},
+            {"Event":"d","latitude":41.034319,"longitude":28.978688,"Size":42,"Icon":"viz_all_layers_3_png-34.png","Density":1,"Category":"other"},
+            {"Event":"e","latitude":41.035484,"longitude":28.979064,"Size":100,"Icon":"viz_all_layers_3_png-32.png","Density":1,"Category":"other"},
+            {"Event":"f","latitude":41.035274,"longitude":28.979911,"Size":42,"Icon":"viz_all_layers_3_png-33.png","Density":3,"Category":"other"},
+            {"Event":"g","latitude":41.035347,"longitude":28.980823,"Size":42,"Icon":"viz_all_layers_3_png-35.png","Density":2,"Category":"educative"},
+            {"Event":"h","latitude":41.034772,"longitude":28.983226,"Size":42,"Icon":"viz_all_layers_3_png-36.png","Density":3,"Category":"educative"},
+            {"Event":"i","latitude":41.032296,"longitude":28.978892,"Size":42,"Icon":"viz_all_layers_3_png-37.png","Density":1,"Category":"other"},
+            {"Event":"","latitude":41.031923,"longitude":28.980072,"Size":100,"Icon":"viz_all_layers_3_png-38.png","Density":2,"Category":"cultural"},
+            {"Event":"k","latitude":41.033016,"longitude":28.983559,"Size":42,"Icon":"viz_all_layers_3_png-39.png","Density":1,"Category":"other"},
+            {"Event":"l","latitude":41.032377,"longitude":28.984535,"Size":42,"Icon":"viz_all_layers_3_png-40.png","Density":1,"Category":"other"},
+            {"Event":"m","latitude":41.031721,"longitude":28.986992,"Size":42,"Icon":"viz_all_layers_3_png-41.png","Density":3,"Category":"entertainment"}]
+
+//Initializing global variables 
+
+            var markersZoom1=[];
+            var markersZoom2=[];
+            var markersZoom3=[];
+            var zoomvalue=12;
+
+//Callback functions for Filter Attenders and Filter Density events.
+            function filterAttenders(newValue)
+                {
+                    if(zoomvalue>=17){
+                        markersZoom3.forEach(mark=>{
+                            if(mark.length<=newValue && document.getElementById(mark.name).checked==true && document.getElementById("range2").value==mark.density){
+                                mark.setVisible(true);
+                            }else if(mark.length>newValue){
+                                mark.setVisible(false);
+                            }
+                        });
+                    }
+                }
+
+                function filterDensity (newValue)
+                {   
+                    if(zoomvalue>=17){
+                       markersZoom3.forEach(mark=>{
+                            if(mark.length<=document.getElementById("range1").value && document.getElementById(mark.name).checked==true  && mark.density==newValue){
+                                mark.setVisible(true);
+                            }else if(mark.density1 != newValue){
+                                mark.setVisible(false);
+                            }
+                        }); 
+                    }
+                }
+        
+// Main function which is called once the window has loaded
+
+            function init() {
+                // Basic options for a simple Google Map
+                // For more options see: https://developers.google.com/maps/documentation/javascript/reference#MapOptions
+                var mapOptions = {
+                    // How zoomed in you want the map to start at (always required)
+                    zoom: 12,
+
+                    // The latitude and longitude to center the map (always required)
+                    center: new google.maps.LatLng(41.0082, 28.9784), // Istanbul
+
+                    disableDefaultUI: true,
+
+                    // How you would like to style the map. 
+                    // This is where you would paste any style found on Snazzy Maps.
+                   styles: [{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#ababab"}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"administrative.country","elementType":"geometry.stroke","stylers":[{"lightness":"59"}]},{"featureType":"administrative.country","elementType":"labels.text","stylers":[{"lightness":"50"},{"color":"#7e7e85"},{"weight":"0.21"}]},{"featureType":"administrative.province","elementType":"geometry.stroke","stylers":[{"weight":"0.5"},{"color":"#afafaf"},{"visibility":"on"}]},{"featureType":"administrative.province","elementType":"labels.text","stylers":[{"visibility":"off"},{"color":"#7e7e85"}]},{"featureType":"administrative.province","elementType":"labels.text.fill","stylers":[{"color":"#7e7e85"}]},{"featureType":"administrative.locality","elementType":"labels.text","stylers":[{"visibility":"on"},{"lightness":"59"}]},{"featureType":"administrative.locality","elementType":"labels.text.fill","stylers":[{"lightness":"-39"}]},{"featureType":"administrative.locality","elementType":"labels.icon","stylers":[{"lightness":"48"},{"visibility":"on"}]},{"featureType":"administrative.neighborhood","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"administrative.land_parcel","elementType":"geometry.stroke","stylers":[{"visibility":"off"},{"color":"#c4c4c7"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape.natural.terrain","elementType":"labels.text","stylers":[{"color":"#ff0000"},{"visibility":"off"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#eaeaea"},{"weight":".5"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"weight":".75"},{"color":"#e4e3e3"}]},{"featureType":"road.highway","elementType":"labels","stylers":[{"visibility":"on"},{"lightness":"20"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"labels.text.stroke","stylers":[{"weight":"0.49"}]},{"featureType":"road.arterial","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"labels.text","stylers":[{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"lightness":"43"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road.local","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"saturation":"-41"},{"color":"#c8c8c8"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#ffffff"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#dce3e2"}]},{"featureType":"water","elementType":"labels.text","stylers":[{"lightness":"100"},{"gamma":"1.13"},{"saturation":"-96"},{"visibility":"on"},{"color":"#eff0f6"},{"weight":"0.01"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"lightness":"74"}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"visibility":"on"}]}]
+                };
+
+                // Get the HTML DOM element that will contain your map 
+                // We are using a div with id="map" seen below in the <body>
+                var mapElement = document.getElementById('map');
+
+                // Create the Google Map using our element and options defined above
+                var map = new google.maps.Map(mapElement, mapOptions);
+
+                //Initializing the traffic and transit layers
+                var trafficLayer = new google.maps.TrafficLayer();
+                var transitLayer = new google.maps.TransitLayer();
+        
+            //Reading data and positiong Markers  
+                locations.forEach(loc=>{
+                    var image={
+                        url: loc.Icon,
+                        scaledSize: new google.maps.Size(loc.Width, loc.Height),
+                    }
+
+                    var marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(loc.latitude, loc.longitude),
+                            map: map,
+                            icon: image,
+                            content: loc.Event,
+                    }); 
+                    markersZoom1.push(marker);
+                });
+
+                zoomLevel2.forEach(loc=>{
+                            var image={
+                                url: loc.Icon,
+                                scaledSize: new google.maps.Size(loc.Width, loc.Height),
+                            }
+
+                            var marker = new google.maps.Marker({
+                                    position: new google.maps.LatLng(loc.latitude, loc.longitude),
+                                    map: map,
+                                    icon: image,
+                                    content: loc.Event,
+                            }); 
+                            marker.setVisible(false);
+                            markersZoom2.push(marker);
+                });
+
+                zoomLevel3.forEach(loc=>{
+                            var image={
+                                url: loc.Icon,
+                                scaledSize: new google.maps.Size(loc.Size, loc.Size),
+                            }
+
+                            var marker = new google.maps.Marker({
+                                    position: new google.maps.LatLng(loc.latitude, loc.longitude),
+                                    map: map,
+                                    icon: image,
+                                    name:loc.Category,
+                                    content: loc.Event,
+                                    length: loc.Size,
+                                    density: loc.Density,
+                            }); 
+                            marker.setVisible(false);
+                            markersZoom3.push(marker);
+                });
+            
+            // Event callbacks for zoom changed functions
+            //for each oom level it displays the markers for that zoom level and hides the ones for other levels
+                google.maps.event.addListener(map, 'zoom_changed', function() {
+                    console.log("zoom level: "+map.getZoom());
+                    zoomvalue=map.getZoom();
+                    if(map.getZoom()==15){
+                        markersZoom1.forEach(mark=>{
+                            mark.setVisible(false);
+                        });
+
+                        markersZoom3.forEach(mark=>{
+                            mark.setVisible(false);
+                        });
+
+                        markersZoom2.forEach(mark=>{
+                            mark.setVisible(true);
+                        });
+
+                    } else if(map.getZoom()==17){
+                        markersZoom2.forEach(mark=>{
+                            mark.setVisible(false);
+                        });
+
+                        markersZoom1.forEach(mark=>{
+                            mark.setVisible(false);
+                        });
+
+                        markersZoom3.forEach(mark=>{
+                            mark.setVisible(true);
+                        });
+                        
+                    } else if(map.getZoom()==12){
+                       markersZoom2.forEach(mark=>{
+                            mark.setVisible(false);
+                        });
+
+                        markersZoom3.forEach(mark=>{
+                            mark.setVisible(false);
+                        }); 
+
+                        markersZoom1.forEach(mark=>{
+                            mark.setVisible(true);
+                        }); 
+
+                    }     
+                });
+
+    //Displaying and enabling auto complete search box for searching locations
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markersSearch = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markersSearch.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markersSearch = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            markersSearch.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+        });
+
+//Conditions for checkbox selection
+                document.getElementById("entertainment").onchange=function(){
+                    if ( document.getElementById("entertainment").checked==true) {
+                        markersZoom3.forEach(mark=>{
+                            if(mark.name==='entertainment' && mark.length<=document.getElementById("range1").value && document.getElementById("range2").value==mark.density){
+                                mark.setVisible(true);
+                            }
+                        })
+                    }else if( document.getElementById("entertainment").checked==false) {
+                        markersZoom3.forEach(mark=>{
+                            if(mark.name==='entertainment'){
+                                mark.setVisible(false);
+                            }
+                        })
+                    }
+                }
+                document.getElementById("cultural").onchange=function(){
+                    if ( document.getElementById("cultural").checked==true) {
+                        markersZoom3.forEach(mark=>{
+                            if(mark.name==='cultural' && mark.length<=document.getElementById("range1").value && document.getElementById("range2").value==mark.density ){
+                                mark.setVisible(true);
+                            }
+                        })
+                    }else if( document.getElementById("cultural").checked==false) {
+                        markersZoom3.forEach(mark=>{
+                            if(mark.name==='cultural'){
+                                mark.setVisible(false);
+                            }
+                        })
+                    }
+                }
+                document.getElementById("educative").onchange=function(){
+                    if ( document.getElementById("educative").checked==true) {
+                        markersZoom3.forEach(mark=>{
+                            if(mark.name==='educative' && mark.length<=document.getElementById("range1").value && document.getElementById("range2").value==mark.density){
+                                mark.setVisible(true);
+                            }
+                        })
+                    }else if( document.getElementById("educative").checked==false) {
+                        markersZoom3.forEach(mark=>{
+                            if(mark.name==='educative'){
+                                // console.log("found");
+                                mark.setVisible(false);
+                            }
+                        })
+                    }
+                }
+                document.getElementById("other").onchange=function(){
+                    if ( document.getElementById("other").checked==true ) {
+                        markersZoom3.forEach(mark=>{
+                            if(mark.name==='other' && mark.length<=document.getElementById("range1").value && document.getElementById("range2").value==mark.density){
+                                mark.setVisible(true);
+                            }
+                        })
+                    }else if( document.getElementById("other").checked==false) {
+                        markersZoom3.forEach(mark=>{
+                            if(mark.name==='other'){
+                                // console.log("found");
+                                mark.setVisible(false);
+                            }
+                        })
+                    }
+                }
+
+                document.getElementById("Traffic").onchange=function(){
+                    if ( document.getElementById("Traffic").checked==true ) {
+                        trafficLayer.setMap(map);
+                    }else if( document.getElementById("Traffic").checked==false) {
+                        trafficLayer.setMap(null);
+                    }
+                }
+
+                document.getElementById("PublicTransport").onchange=function(){
+                    if ( document.getElementById("PublicTransport").checked==true ) {
+                        transitLayer.setMap(map);
+                    }else if( document.getElementById("PublicTransport").checked==false) {
+                        transitLayer.setMap(null);
+                    }
+                }
+                
+
+            }
+                
+        </script>
+    </head>
+    <body>
+
+        <!-- The element that will contain our Google Map. This is used in both the Javascript and CSS above. -->
+        <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+        <div id="map"></div>
+    </body>
+</html>

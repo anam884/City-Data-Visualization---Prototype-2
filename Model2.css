@@ -1,0 +1,261 @@
+body {
+    background-color: #F1F1F3;
+}
+
+/*Styling for search box*/
+	#pac-input {
+	    background-color: #fff;
+	    font-family: Roboto;
+	    font-size: 15px;
+	    font-weight: 300;
+	    margin-left: 38%;
+	    padding: 0 11px 0 13px;
+	    text-overflow: ellipsis;
+	    width: 300px;
+	}
+	.controls {
+	    margin-top: 10px;
+	    border: 1px solid transparent;
+	    border-radius: 2px 0 0 2px;
+	    box-sizing: border-box;
+	    -moz-box-sizing: border-box;
+	    height: 32px;
+	    outline: none;
+	    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+	}
+
+	#pac-input:focus {
+	    border-color: #4d90fe;
+	}
+
+	.pac-container {
+		font-family: Roboto;
+	}
+
+	#type-selector {
+	    color: #fff;
+	    background-color: #4d90fe;
+	    padding: 5px 11px 0px 11px;
+	}
+
+	#type-selector label {
+	    font-family: Roboto;
+	    font-size: 13px;
+	    font-weight: 300;
+	}
+	      
+	#target {
+	    width: 345px;
+	}
+
+/*Styling for Event Details check boxes*/
+
+	.box{ 
+	  background-color: #F1F1F3;
+	  position: absolute;
+	  height: 65%;
+	  width: 15%;
+	  left: 87%;
+	  top: 12%;
+	  opacity: 0.6;
+	  z-index: 1;
+	}
+
+	.Checkbox_Entertainment{
+		position: absolute;
+		top: 20%;
+		left: 88%;
+		color: #E17A3D;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+	.Checkbox_cultural{
+		position: absolute;
+		top: 23%;
+		left: 88%;
+		color: #EDC74E;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+	.Checkbox_Education{
+		position: absolute;
+		top: 26%;
+		left: 88%;
+		color: #40B09C;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+	.Checkbox_Other{
+		position: absolute;
+		top: 29%;
+		left: 88%;
+		color: #DC4949;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+	#EventAttenders{
+		position: absolute;
+		top: 33%;
+		left: 88%;
+		color: black;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+	.range1{
+		position: absolute;
+		z-index: 2;
+		top: 37%;
+		left: 88%;	
+	}
+
+	#PeopleDensity{
+		position: absolute;
+		top: 40%;
+		left: 88%;
+		color: black;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+	.range2{
+		position: absolute;
+		z-index: 2;
+		top: 44%;
+		left: 88%;
+	}
+
+	#Noise{
+		position: absolute;
+		top: 47%;
+		left: 88%;
+		color: black;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+	.range3{
+		position: absolute;
+		z-index: 2;
+		top: 51%;
+		left: 88%;
+	}
+
+	#Physicalchaos{
+		position: absolute;
+		top: 54%;
+		left: 88%;
+		color: black;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+	.range4{
+		position: absolute;
+		z-index: 2;
+		top: 57%;
+		left: 88%;
+	}
+
+	#Price{
+		position: absolute;
+		top: 61%;
+		left: 88%;
+		color: black;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+	.range5{
+		position: absolute;
+		z-index: 2;
+		top: 65%;
+		left: 88%;
+	}
+
+
+/*Styling for layers*/
+	.box2{ 
+	  background-color: #F1F1F3;
+	  position: absolute;
+	  height: 30%;
+	  width: 12%;
+	  left: 0%;
+	  top: 12%;
+	  opacity: 0.6;
+	  z-index: 1;
+	}
+
+	.Checkbox_HumanDensity{
+		position: absolute;
+		top: 20%;
+		left: 2%;
+		color: black;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+	.Checkbox_Traffic{
+		position: absolute;
+		top: 23%;
+		left: 2%;
+		color: black;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+	.Checkbox_Weather{
+		position: absolute;
+		top: 26%;
+		left: 2%;
+		color: black;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+	.Checkbox_PublicTransportation{
+		position: absolute;
+		top: 29%;
+		left: 2%;
+		color: black;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+	.Checkbox_AirPollution{
+		position: absolute;
+		top: 32%;
+		left: 2%;
+		color: black;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+	.Checkbox_Noise{
+		position: absolute;
+		top: 35%;
+		left: 2%;
+		color: black;
+		z-index: 2;
+		font-family: 'Roboto';
+		font-size: 12px;
+	}
+
+
